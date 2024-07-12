@@ -622,12 +622,13 @@ impl ProgramTest {
         &mut self,
         program_name: &'static str,
         program_id: &Pubkey,
+        upgrade_authority: Option<Pubkey>,
     ) {
         let program_file = find_file(&format!("{program_name}.so"))
             .expect("Program file data not available for {program_name} ({program_id})");
         let elf = read_file(program_file);
         let program_accounts =
-            programs::bpf_loader_upgradeable_program_accounts(program_id, &elf, &Rent::default());
+            programs::bpf_loader_upgradeable_program_accounts(program_id, &elf, &Rent::default(), upgrade_authority);
         for (address, account) in program_accounts {
             self.add_genesis_account(address, account);
         };
