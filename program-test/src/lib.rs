@@ -15,10 +15,9 @@ use {
     solana_banks_client::start_client,
     solana_banks_server::banks_server::start_local_server,
     solana_bpf_loader_program::serialization::serialize_parameters,
-    solana_compute_budget::compute_budget::ComputeBudget,
     solana_program_runtime::{
-        ic_msg, invoke_context::BuiltinFunctionWithContext, loaded_programs::ProgramCacheEntry,
-        stable_log, timings::ExecuteTimings,
+        ic_msg, invoke_context::BuiltinFunctionWithContext, loaded_programs::LoadedProgram,
+        stable_log, timings::ExecuteTimings, compute_budget::ComputeBudget,
     },
     solana_runtime::{
         accounts_background_service::{AbsRequestSender, SnapshotRequestKind},
@@ -466,7 +465,7 @@ pub fn read_file<P: AsRef<Path>>(path: P) -> Vec<u8> {
 pub struct ProgramTest {
     accounts: Vec<(Pubkey, AccountSharedData)>,
     genesis_accounts: Vec<(Pubkey, AccountSharedData)>,
-    builtin_programs: Vec<(Pubkey, &'static str, ProgramCacheEntry)>,
+    builtin_programs: Vec<(Pubkey, String, LoadedProgram)>,
     compute_max_units: Option<u64>,
     prefer_bpf: bool,
     deactivate_feature_set: HashSet<Pubkey>,
@@ -750,15 +749,15 @@ impl ProgramTest {
     /// Note that builtin programs are responsible for their own `stable_log` output.
     pub fn add_builtin_program(
         &mut self,
-        program_name: &'static str,
+        program_name: &str,
         program_id: Pubkey,
         builtin_function: BuiltinFunctionWithContext,
     ) {
         info!("\"{}\" builtin program", program_name);
         self.builtin_programs.push((
             program_id,
-            program_name,
-            ProgramCacheEntry::new_builtin(0, program_name.len(), builtin_function),
+            program_name.to_string(),
+            LoadedProgram::new_builtin(0, program_name.len(), builtin_function),
         ));
     }
 
@@ -836,7 +835,7 @@ impl ProgramTest {
         debug!("Payer address: {}", mint_keypair.pubkey());
         debug!("Genesis config: {}", genesis_config);
 
-        let bank = Bank::new_with_paths(
+        let mut bank = Bank::new_with_paths(
             &genesis_config,
             Arc::new(RuntimeConfig {
                 compute_budget: self.compute_max_units.map(|max_units| ComputeBudget {
