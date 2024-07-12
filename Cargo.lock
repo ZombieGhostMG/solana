@@ -6250,6 +6250,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "solana-inline-spl"
+version = "1.18.18"
+dependencies = [
+ "bytemuck",
+ "rustc_version 0.4.0",
+ "solana-sdk",
+]
+
+[[package]]
 name = "solana-install"
 version = "1.18.18"
 dependencies = [
@@ -6762,6 +6771,7 @@ dependencies = [
  "solana-banks-interface",
  "solana-banks-server",
  "solana-bpf-loader-program",
+ "solana-inline-spl",
  "solana-logger",
  "solana-program-runtime",
  "solana-runtime",

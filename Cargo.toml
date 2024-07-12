@@ -40,6 +40,7 @@ members = [
     "geyser-plugin-interface",
     "geyser-plugin-manager",
     "gossip",
+    "inline-spl",
     "install",
     "keygen",
     "ledger",
@@ -339,6 +340,7 @@ solana-genesis-utils = { path = "genesis-utils", version = "=1.18.18" }
 solana-geyser-plugin-interface = { path = "geyser-plugin-interface", version = "=1.18.18" }
 solana-geyser-plugin-manager = { path = "geyser-plugin-manager", version = "=1.18.18" }
 solana-gossip = { path = "gossip", version = "=1.18.18" }
+solana-inline-spl = { path = "inline-spl", version = "=1.18.18" }
 solana-ledger = { path = "ledger", version = "=1.18.18" }
 solana-loader-v4-program = { path = "programs/loader-v4", version = "=1.18.18" }
 solana-local-cluster = { path = "local-cluster", version = "=1.18.18" }
