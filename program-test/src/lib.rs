@@ -1157,8 +1157,7 @@ impl ProgramTestContext {
         let abs_request_sender = AbsRequestSender::new(snapshot_request_sender);
 
         bank_forks
-            .set_root(pre_warp_slot, &abs_request_sender, Some(pre_warp_slot))
-            .unwrap();
+            .set_root(pre_warp_slot, &abs_request_sender, Some(pre_warp_slot));
 
         // The call to `set_root()` above will send an EAH request.  Need to intercept and handle
         // all EpochAccountsHash requests so future rooted banks do not hang in Bank::freeze()
@@ -1225,8 +1224,7 @@ impl ProgramTestContext {
                 pre_warp_slot,
                 &solana_runtime::accounts_background_service::AbsRequestSender::default(),
                 Some(pre_warp_slot),
-            )
-            .unwrap();
+            );
 
         // warp_bank is frozen so go forward to get unfrozen bank at warp_slot
         let warp_slot = pre_warp_slot + 1;
